@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>
@@ -30,9 +30,15 @@
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>6.0.29</version>
+			<version>6.0.53</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
 		<!-- 支持的数据源,默认已经支持mysql -->
 		<dependency>
 			<groupId>net.sourceforge.jtds</groupId>
@@ -48,7 +54,7 @@
 			<plugin> 
 			    <groupId>org.mortbay.jetty</groupId> 
 			    <artifactId>maven-jetty-plugin</artifactId>
-			    <version>6.0.0alpha3</version>
+			    <version>6.1.25</version>
 			    <configuration>    
 			        <contextPath>/autoCode</contextPath>    
 			        <connectors>    
