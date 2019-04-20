@@ -1,0 +1,147 @@
+<%@page import="org.durcframework.autocode.common.AutoCodeContext"%>
+<c:set var="base"
+       value='<%=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/" %>'/>
+
+<%@ page language="java" contentType="text/html; charset=utf-8"
+pageEncoding="utf-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>${table.tableName}</title>
+    <jsp:include page="../../../easyui_lib.jsp"></jsp:include>
+    <style type="text/css">
+        .fm_lab {
+            text-align: right;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="toolbar">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="crud.add()">添加</a>
+</div>
+
+<div id="templateTb">
+    #foreach($column in $columns)
+        #if( ${column.javaType}=='int' or (${column.javaType}=='String' and  ${column.type}=='VARCHAR'))
+            ${column.javaFieldName}:&nbsp;<input id="${column.javaFieldName}Sch" class="easyui-textbox"
+                                                 type="text"></input>
+        #end
+        #if(!${column.isIdentityPk})
+            #if(${column.javaType}=='Date')
+                <tr>
+                    <td class="fm_lab">${column.javaFieldName}</td>
+                    <td><input id="${column.javaFieldName}" name="${column.javaFieldName}" class="easyui-validatebox"
+                               required="true"></td>
+                    <td><input name="createdStartSch" class="easyui-datebox" style="width: 100px"/>
+                        -
+                        <input name="createdEndSch" class="easyui-datebox" style="width: 100px"/>
+                    </td>
+                </tr>
+            #end
+        #end
+    #end
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="searchTemplate(); return false;">搜索</a>
+</div>
+<table id="dg"></table>
+<div id="dlg" class="easyui-dialog" style="width:520px;height:220px;padding:10px 20px"
+     closed="true" modal="true" buttons="#dlg-buttons">
+    <form id="fm" method="post">
+        <table>
+            #foreach($column in $columns)
+                #if(!${column.isIdentityPk})
+                    #if(${column.javaType}=='boolean')
+                        <tr>
+                            <td class="fm_lab">${column.javaFieldName}</td>
+                            <td><input id="${column.javaFieldName}" name="${column.javaFieldName}"
+                                       class="easyui-switchbutton" checked></td>
+                        </tr>
+                    #end
+                    #if(${column.javaType}=='int')
+                        <tr>
+                            <td class="fm_lab">${column.javaFieldName}</td>
+                            <td><input id="${column.javaFieldName}" name="${column.javaFieldName}"
+                                       class="easyui-validatebox" required="true"></td>
+                        </tr>
+                    #end
+                    #if(${column.javaType}=='byte')
+                        <tr>
+                            <th>${column.javaFieldName}</th>
+                            <td><input id="${column.javaFieldName}" value="0" name="${column.javaFieldName}"
+                                       class="textbox" style="height: 22px;"/></td>
+                        </tr>
+                    #end
+                    #if(${column.javaType}=='String' and  ${column.type}=='VARCHAR')
+                        <tr>
+                            <td class="fm_lab">${column.javaFieldName}</td>
+                            <td><input id="${column.javaFieldName}" name="${column.javaFieldName}"
+                                       class="easyui-validatebox" required="true"></td>
+                        </tr>
+                    #end
+                    #if(${column.javaType}=='String' and ${column.type}=='longtext')
+                        <tr>
+                            <td class="fm_lab">${column.javaFieldName}</td>
+                            <td colspan="3"><textarea id="${column.javaFieldName}" name="${column.javaFieldName}"
+                                                      style="width: 98%; margin-bottom: 3px;"></textarea>
+                                <input type="button" mode="0" class="editor"
+                                       onclick="EditorRender('${column.javaFieldName}',$(this))" value="切换至编辑器"/>
+                            </td>
+                        </tr>
+                    #end
+                    #if(${column.javaType}=='Date')
+                        <tr>
+                            <td class="fm_lab">${column.javaFieldName}</td>
+                            <td><input id="${column.javaFieldName}" name="${column.javaFieldName}"
+                                       data-options="disabled:false" class="easyui-datetimebox" />
+                            </td>
+                        </tr>
+                    #end
+                #end
+            #end
+        </table>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="crud.save(); return false;">保存</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="crud.closeDlg(); return false;">取消</a>
+</div>
+
+<script type="text/javascript">
+    var crud = Crud.create({
+        pk: 'username'
+        , listUrl: ctx + 'list${context.javaBeanName}.do'
+        , addUrl: ctx + 'add${context.javaBeanName}.do'
+        , updateUrl: ctx + 'update${context.javaBeanName}.do'
+        , delUrl: ctx + 'del${context.javaBeanName}.do'
+        , dlgId: 'dlg'
+        , formId: 'fm'
+        , gridId: 'dg'
+    });
+
+    crud.buildGrid([
+        #foreach($column in $columns)
+            {field:'${column.javaFieldName}',title:'${column.javaFieldName}'},
+        #end
+        crud.createOperColumn()
+    ]);
+
+    function searchTemplate() {
+        $('#dg').datagrid('load', {
+            #foreach($column in $columns)
+                #if(!${column.isIdentityPk})
+                    #if(${column.javaType}=='int')
+                        ${column.javaFieldName}Sch: $('#${column.javaFieldName}Sch').val(),
+                    #end
+
+                    #if(${column.javaType}=='String' and  ${column.type}=='VARCHAR')
+                            ${column.javaFieldName}Sch: $('#${column.javaFieldName}Sch').val(),
+                    #end
+                #end
+            #end
+        });
+    }
+
+</script>
+</body>
+</html>

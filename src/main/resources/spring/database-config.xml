@@ -63,7 +63,7 @@
 
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-		<property name="basePackage" value="org.durcframework.autocode.dao" />
+		<property name="basePackage" value="org.durcframework.autocode.dao,com.qunar.web.dao" />
 	</bean>
 	
 	

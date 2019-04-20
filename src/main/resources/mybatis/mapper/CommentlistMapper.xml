@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qunar.web.dao.Customers.CommentlistDao">
+    <resultMap id="queryResultMap" type="com.qunar.web.entity.Customers.Commentlist">
+                <result column="id" property="id" jdbcType="INTEGER" />
+                <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+                <result column="name" property="name" jdbcType="VARCHAR" />
+                <result column="rate" property="rate" jdbcType="DOUBLE" />
+                <result column="comment" property="comment" jdbcType="VARCHAR" />
+                <result column="cus_id" property="cusId" jdbcType="VARCHAR" />
+                <result column="like_id" property="likeId" jdbcType="INTEGER" />
+                <result column="order_id" property="orderId" jdbcType="INTEGER" />
+            </resultMap>
+
+    <select id="find" parameterType="org.durcframework.core.expression.ExpressionQuery"
+		resultMap="queryResultMap">
+		SELECT t.*
+		FROM commentlist t
+		<include refid="expressionBlock.where" />
+		<choose>
+			<when test="sortname == null">
+				ORDER BY t.id desc
+			</when>
+			<otherwise>
+				ORDER BY ${order}
+			</otherwise>
+		</choose>
+		<if test="!isQueryAll">
+			LIMIT
+            #{firstResult,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+		</if>
+	</select>
+
+
+    <select id="findTotalCount" parameterType="org.durcframework.core.expression.ExpressionQuery"
+		resultType="java.lang.Integer">
+		SELECT count(*) FROM commentlist t
+		<include refid="expressionBlock.where" />
+    </select>
+
+    <insert id="save" parameterType="com.qunar.web.entity.Customers.Commentlist"
+    keyProperty="id" keyColumn="id" useGeneratedKeys="true"
+    >
+	INSERT INTO commentlist
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        
+                <if test="id != null">
+            `id`,
+         </if>       
+                <if test="avatar != null">
+            `avatar`,
+         </if>       
+                <if test="name != null">
+            `name`,
+         </if>       
+                <if test="rate != null">
+            `rate`,
+         </if>       
+                <if test="comment != null">
+            `comment`,
+         </if>       
+                <if test="cusId != null">
+            `cus_id`,
+         </if>       
+                <if test="likeId != null">
+            `like_id`,
+         </if>       
+                <if test="orderId != null">
+            `order_id`,
+         </if>       
+               
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+                     <if test="id != null">
+            #{id,jdbcType=INTEGER},
+            </if>
+                     <if test="avatar != null">
+            #{avatar,jdbcType=VARCHAR},
+            </if>
+                     <if test="name != null">
+            #{name,jdbcType=VARCHAR},
+            </if>
+                     <if test="rate != null">
+            #{rate,jdbcType=DOUBLE},
+            </if>
+                     <if test="comment != null">
+            #{comment,jdbcType=VARCHAR},
+            </if>
+                     <if test="cusId != null">
+            #{cus_id,jdbcType=VARCHAR},
+            </if>
+                     <if test="likeId != null">
+            #{like_id,jdbcType=INTEGER},
+            </if>
+                     <if test="orderId != null">
+            #{order_id,jdbcType=INTEGER},
+            </if>
+             </trim>
+	</insert>
+
+    <update id="update" parameterType="com.qunar.web.entity.Customers.Commentlist">
+    UPDATE commentlist
+        <set>
+                    <if test="id != null">
+            id = #{id,jdbcType=INTEGER},
+             </if> 
+                    <if test="avatar != null">
+            avatar = #{avatar,jdbcType=VARCHAR},
+             </if> 
+                    <if test="name != null">
+            name = #{name,jdbcType=VARCHAR},
+             </if> 
+                    <if test="rate != null">
+            rate = #{rate,jdbcType=DOUBLE},
+             </if> 
+                    <if test="comment != null">
+            comment = #{comment,jdbcType=VARCHAR},
+             </if> 
+                    <if test="cusId != null">
+            cus_id = #{cusId,jdbcType=VARCHAR},
+             </if> 
+                    <if test="likeId != null">
+            like_id = #{likeId,jdbcType=INTEGER},
+             </if> 
+                    <if test="orderId != null">
+            order_id = #{orderId,jdbcType=INTEGER},
+             </if> 
+                </set>
+    WHERE id 
+    <if test="id != null">
+        = #{id,jdbcType=INTEGER}
+    </if>
+    </update>
+
+    <select id="get" resultMap="queryResultMap" parameterType="com.qunar.web.entity.Customers.Commentlist">
+		SELECT t.*
+		FROM commentlist t
+		WHERE id = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<delete id="del" parameterType="com.qunar.web.entity.Customers.Commentlist">
+		DELETE FROM commentlist
+		WHERE id = 
+        <if test="id != null">
+        #{id,jdbcType=INTEGER}
+        </if>
+	</delete>
+
+</mapper>

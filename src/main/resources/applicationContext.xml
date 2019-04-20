@@ -18,6 +18,12 @@
 			type="annotation" />
 	</context:component-scan>
 
+	<context:component-scan base-package="com.qunar.web.service.*">
+		<!-- 不要扫描Controller类 -->
+		<context:exclude-filter expression="org.springframework.stereotype.Controller"
+								type="annotation" />
+	</context:component-scan>
+
 	<import resource="classpath*:/spring/*.xml" />
 	
 </beans>
