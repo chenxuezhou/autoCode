@@ -11,7 +11,7 @@
 
 > **部署程序步骤:**
 
-> 1. Maven构建eclipse工程,运行Maven命令:mvn eclipse:eclipse,完成后导入到eclipse中
+
 > 4. 启动项目,运行Maven命令:mvn jetty:run
 
 
@@ -24,8 +24,4 @@ jsp 和mapper.xml移动到对应位置，applicationContext.xml和MVC.xml文件�
 
 org.mybatis.spring.mapper.MapperScannerConfigurer 对应的bean配置basePackage
 
-
-一个表记录没有插入，结果从各方面去排查，累死我了，稍微留心点，还是对Java技术框架不够自信，总以为它有问题，然后这种框架都是人为去写，太细了
-
-时间为特定的词createdTime
 
